@@ -11,8 +11,7 @@
     "minimum-stability": "stable",
     "require": {
         "php": ">=5.4.0",
-        "yiisoft/yii2": "~2.0.0",
-		"inspirenmy/yii2-core" : "*"
+		"inspirenmy/yii2-ecommerce" : "*"
 	},
     "require-dev": {
         "yiisoft/yii2-codeception": "~2.0.0",

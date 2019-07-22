@@ -8,6 +8,7 @@ return [
 		//'common/modules/moduleManager' => dirname(dirname(__DIR__)).'/vendor/inspirenmy/yii2-core/src/common/modules/moduleManager',
 		'vendor' => dirname(dirname(__DIR__)).'/vendor',
 		//'@common/migrations' => '@vendor/inspirenmy/yii2-core/src/common/migrations',
+        '@common/rbac/views' => '@vendor/inspirenmy/yii2-core/src/common/rbac/views',
 	],
     'components' => [
         'i18n' => [
@@ -29,6 +30,7 @@ return [
         'moduleManager' => [
             'class' => 'common\modules\moduleManager\components\ModuleManager',
 			'moduleAutoloadPaths' => [
+				'@src', 
 				'@common/modules', 
 				'@vendor/inspirenmy/yii2-ecommerce/src/common/modules', 
 				'@vendor/inspirenmy/yii2-user/src/common/modules',
