@@ -23,7 +23,7 @@ class AffiliateManager extends \yii\base\Component {
 
     public $cookiesExpire = 0; // seconds
     public $overrideMethods = [];
-    public $referralQueryParamName = 'ref';
+    public $referralQueryParamName = 'referral';
 
     public function init()
     {
@@ -32,7 +32,10 @@ class AffiliateManager extends \yii\base\Component {
         $this->requestCookies = Yii::$app->request->cookies;
     }
 
-    public function createReferralUrl($route) {
+    public function createReferralUrl($model) {
+      if ($this->referralQueryParamName == 'r') throw new \Exception('Query param name "r" is reserved for yii route, please choose other name.');
+     
+      $route = $this->getUrlRoute($model);
       $referral = Referral::findOne(['user_id' => Yii::$app->user->id]);
       return Url::to(ArrayHelper::merge($route, [$this->referralQueryParamName => $referral->name]), true);
     }
@@ -60,6 +63,13 @@ class AffiliateManager extends \yii\base\Component {
 
     public function getReferral() {
       return $this->session->get(self::SESSION_NAME, $this->requestCookies->getValue(self::COOKIES_NAME));
+    }
+
+    public function getUrlRoute($model) {
+      if (isset($this->overrideMethods['getUrlRoute']) && is_callable($this->overrideMethods['getUrlRoute'])) {
+        return call_user_func_array($this->overrideMethods['getUrlRoute'], [$model]);
+      }
+      return $model->route;
     }
     
     public function getCommissionForReferralContribution($contribution) {

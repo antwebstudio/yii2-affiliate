@@ -30,7 +30,7 @@ Yii::setAlias('@src', dirname(dirname(__DIR__)).'/src');
 Yii::setAlias('@common', dirname(dirname(__DIR__)).'/src/common');
 Yii::setAlias('@tests', dirname(__DIR__));
 
-$config = require dirname(__DIR__).'/config/unit.php';
+$config = require dirname(__DIR__).'/config/common.php';
 
 $application = new yii\console\Application($config);
 $exitCode = $application->run();

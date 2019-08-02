@@ -33,6 +33,6 @@ class ReferrableBehavior extends \yii\base\Behavior {
     }
 
     protected function getReferralId() {
-        return Yii::$app->session->get(ReferralFilter::SESSION_NAME);
+        return Yii::$app->affiliateManager->getReferral();
     }
 }

@@ -10,6 +10,12 @@ return [
 		//'@common/migrations' => '@vendor/inspirenmy/yii2-core/src/common/migrations',
         '@common/rbac/views' => '@vendor/inspirenmy/yii2-core/src/common/rbac/views',
 	],
+	/*'bootstrap' => ['gii'],
+	'modules' => [	
+		'gii' => [
+			'class' => 'yii\gii\Module',
+		],
+	],*/
     'components' => [
         'i18n' => [
             'translations' => [

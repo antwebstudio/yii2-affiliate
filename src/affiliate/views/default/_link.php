@@ -1,6 +1,6 @@
 <?php
 
-$url = Yii::$app->affiliateManager->createReferralUrl($model->route);
+$url = Yii::$app->affiliateManager->createReferralUrl($model);
 ?>
 <div style="background-color: #dddddd; padding: 10px 15px; margin-bottom:10px; ">
     <h4><?= $model->title ?></h4>
