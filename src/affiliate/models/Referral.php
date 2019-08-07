@@ -3,6 +3,7 @@
 namespace ant\affiliate\models;
 
 use Yii;
+use common\helpers\Currency;
 use common\modules\user\models\User;
 use common\modules\order\models\Order;
 
@@ -21,6 +22,8 @@ use common\modules\order\models\Order;
  */
 class Referral extends \yii\db\ActiveRecord
 {
+    const SCENARIO_CAMPAIGN = 'campaign';
+
     /**
      * {@inheritdoc}
      */
@@ -35,10 +38,12 @@ class Referral extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
+            [['name'], 'required', 'except' => self::SCENARIO_CAMPAIGN],
             [['user_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['name'], 'string', 'max' => 255],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+
+            [['user_id'], 'unique', 'targetAttribute' => ['user_id', 'campaign_id'], 'message' => 'User is already added.'],
         ];
     }
 
@@ -68,6 +73,14 @@ class Referral extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getCampaign()
+    {
+        return $this->hasOne(Campaign::className(), ['id' => 'campaign_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getContributions()
     {
         return $this->hasMany(ReferralContribution::className(), ['referral_id' => 'id']);
@@ -86,11 +99,11 @@ class Referral extends \yii\db\ActiveRecord
 
     public function getTotalContributionAmount() {
         $sum = $this->getCompletedContributions()->sum('invoice.paid_amount');
-		return isset($sum) ? $sum : 0;
+		return isset($sum) ? Currency::rounding($sum) : 0;
     }
 	
 	public function getTotalCommission() {
         $sum = $this->getCompletedContributions()->sum('commission_amount');
-		return isset($sum) ? $sum : 0;
+		return isset($sum) ? Currency::rounding($sum) : 0;
 	}
 }

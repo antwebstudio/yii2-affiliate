@@ -20,7 +20,11 @@ $this->params['sideNav']['items'] = [
 		'active' => $isLinkPage,
 	],
 ];
-$referral = Referral::findOne(['user_id' => Yii::$app->user->id]);
+$referral = Referral::find()->andWhere(['user_id' => Yii::$app->user->id]);
+if ($campaignId = Yii::$app->request->get('campaign')) {
+	$referral->andWhere(['campaign_id' => $campaignId]);
+}
+$referral = $referral->one();
 if (!isset($referral)) throw new \yii\web\NotFoundHttpException('You don\'t have referral account. ');
 ?>
 <style>
@@ -80,6 +84,14 @@ if (!isset($referral)) throw new \yii\web\NotFoundHttpException('You don\'t have
 			
 		]),
 		'columns' => [
+			[
+				'attribute' => 'id',
+				'visible' => YII_DEBUG,
+			],
+			[
+				'attribute' => 'order.formattedId',
+				'visible' => YII_DEBUG,
+			],
 			[
 				'label' => 'Buyer',
 				'value' => function($model) {

@@ -3,6 +3,7 @@ namespace ant\affiliate\behaviors;
 
 use Yii;
 use yii\db\ActiveRecord;
+use ant\affiliate\models\Referral;
 use ant\affiliate\models\ReferralContribution;
 use ant\affiliate\filters\ReferralFilter;
 use common\modules\order\models\Order;
@@ -17,10 +18,11 @@ class ReferrableBehavior extends \yii\base\Behavior {
 
     public function afterInsert($event) {
         $referralId = $this->getReferralId();
+		$referral = Referral::findOne($referralId);
 
-        if (isset($referralId)) {
+        if (isset($referral) && (!isset($referral->campaign) || $referral->campaign->isActive)) {
             $contribution = new ReferralContribution;
-            $contribution->referral_id = $referralId;
+            $contribution->referral_id = $referral->id;
             $contribution->order_id = $this->owner->id;
             $contribution->status = 0;
 
