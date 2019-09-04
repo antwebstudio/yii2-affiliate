@@ -21,12 +21,7 @@ class ReferrableBehavior extends \yii\base\Behavior {
 		$referral = Referral::findOne($referralId);
 
         if (isset($referral) && (!isset($referral->campaign) || $referral->campaign->isActive)) {
-            $contribution = new ReferralContribution;
-            $contribution->referral_id = $referral->id;
-            $contribution->order_id = $this->owner->id;
-            $contribution->status = 0;
-
-            if (!$contribution->save()) throw new \Exception(print_r($contribution->errors, 1));
+            $referral->recordContribution($this->owner);
         }
     }
 

@@ -17,6 +17,17 @@ return [
 		],
 	],*/
     'components' => [
+		'notifier' => [
+           'class' => '\tuyakhov\notifications\Notifier',
+		   'on '.\tuyakhov\notifications\Notifier::EVENT_AFTER_SEND => function($event) {
+		   },
+           'channels' => [
+               'mail' => [
+                   'class' => '\tuyakhov\notifications\channels\MailChannel',
+                   'from' => env('ROBOT_EMAIL'),
+               ],
+           ],
+       ],
         'i18n' => [
             'translations' => [
                 '*'=> [

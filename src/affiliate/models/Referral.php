@@ -106,4 +106,23 @@ class Referral extends \yii\db\ActiveRecord
         $sum = $this->getCompletedContributions()->sum('commission_amount');
 		return isset($sum) ? Currency::rounding($sum) : 0;
 	}
+	
+	public function recordContribution($order) {
+		$contribution = new ReferralContribution;
+		$contribution->referral_id = $this->id;
+		$contribution->order_id = $order->id;
+		$contribution->status = 0;
+		
+		if (isset($this->campaign)) {
+			$contribution->commission_amount = Currency::rounding($this->calculateComission($order->subtotal, $this->campaign->commission_percent / 100));
+		}
+
+		if (!$contribution->save()) throw new \Exception(print_r($contribution->errors, 1));
+		
+		return $contribution;
+	}
+	
+	protected function calculateComission($amount, $rate) {
+		return $amount * $rate;
+	}
 }
