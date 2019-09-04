@@ -122,6 +122,18 @@ class Referral extends \yii\db\ActiveRecord
 		return $contribution;
 	}
 	
+	public function updateContribution($order) {
+		$contribution = ReferralContribution::findOne(['order_id' => $order->id]);
+		
+		if (isset($this->campaign)) {
+			$contribution->commission_amount = Currency::rounding($this->calculateComission($order->subtotal, $this->campaign->commission_percent / 100));
+		}
+		
+		if (!$contribution->save()) throw new \Exception(print_r($contribution->errors, 1));
+		
+		return $contribution;
+	}
+	
 	protected function calculateComission($amount, $rate) {
 		return $amount * $rate;
 	}

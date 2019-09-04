@@ -26,7 +26,12 @@ class ReferrableBehavior extends \yii\base\Behavior {
     }
 
     public function afterOrderConfirmed($event) {
-
+        $referralId = $this->getReferralId();
+		$referral = Referral::findOne($referralId);
+		
+		if (isset($referral)) {
+			$referral->updateContribution($this->owner);
+		}
     }
 
     protected function getReferralId() {
