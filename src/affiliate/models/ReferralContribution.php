@@ -53,7 +53,7 @@ class ReferralContribution extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['referral_id', 'order_id', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['referral_id', 'order_id', 'status'], 'integer'],
             [['order_id'], 'exist', 'skipOnError' => true, 'targetClass' => Order::className(), 'targetAttribute' => ['order_id' => 'id']],
             [['referral_id'], 'exist', 'skipOnError' => true, 'targetClass' => Referral::className(), 'targetAttribute' => ['referral_id' => 'id']],
         ];
