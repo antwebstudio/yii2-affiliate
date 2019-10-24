@@ -4,7 +4,7 @@ namespace ant\affiliate\models;
 
 use Yii;
 use yii\db\ActiveRecord;
-use common\modules\order\models\Order;
+use ant\order\models\Order;
 use ant\affiliate\models\Referral;
 
 /**
@@ -33,7 +33,7 @@ class ReferralContribution extends \yii\db\ActiveRecord
     public function behaviors() {
         return [
             [
-                'class' => 'common\behaviors\TimestampBehavior',
+                'class' => 'ant\behaviors\TimestampBehavior',
             ],
             [
                 'class' => 'yii\behaviors\AttributeBehavior',

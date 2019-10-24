@@ -3,7 +3,7 @@
 namespace ant\affiliate\models;
 
 use Yii;
-use common\models\ModelClass;
+use ant\models\ModelClass;
 use ant\affiliate\models\Referral;
 
 /**
@@ -28,7 +28,7 @@ class Campaign extends \yii\db\ActiveRecord
     public function behaviors() {
         return [
             [
-                'class' => 'common\behaviors\TimestampBehavior',
+                'class' => 'ant\behaviors\TimestampBehavior',
             ],
         ];
     }

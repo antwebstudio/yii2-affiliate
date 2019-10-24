@@ -3,9 +3,9 @@
 namespace ant\affiliate\models;
 
 use Yii;
-use common\helpers\Currency;
-use common\modules\user\models\User;
-use common\modules\order\models\Order;
+use ant\helpers\Currency;
+use ant\user\models\User;
+use ant\order\models\Order;
 
 /**
  * This is the model class for table "em_affiliate_referral".

@@ -2,8 +2,8 @@
 use ant\affiliate\models\Referral;
 use ant\affiliate\models\ReferralContribution;
 use yii\data\ActiveDataProvider;
-use common\helpers\StringHelper;
-use common\modules\event\models\Event;
+use ant\helpers\StringHelper;
+use ant\event\models\Event;
 
 $this->context->layout = '//left-sidenav';
 
@@ -117,7 +117,7 @@ if (!isset($referral)) throw new \yii\web\NotFoundHttpException('You don\'t have
 	]) ?>
 <?php endif ?>
 
-<?php \common\widgets\JsBlock::begin() ?>
+<?php \ant\widgets\JsBlock::begin() ?>
 <script>
 	function copyLinkIn() {
 		var buttons = document.querySelectorAll('.copy-btn');
@@ -141,4 +141,4 @@ if (!isset($referral)) throw new \yii\web\NotFoundHttpException('You don\'t have
 		document.body.removeChild(currentLink);
 	}
 </script>
-<?php \common\widgets\JsBlock::end() ?>
+<?php \ant\widgets\JsBlock::end() ?>

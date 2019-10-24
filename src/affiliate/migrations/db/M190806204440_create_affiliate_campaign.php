@@ -2,7 +2,7 @@
 
 namespace ant\affiliate\migrations\db;
 
-use common\components\Migration;
+use ant\components\Migration;
 
 /**
  * Class M190806204440_create_affiliate_Campaign

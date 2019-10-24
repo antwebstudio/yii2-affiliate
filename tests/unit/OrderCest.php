@@ -1,9 +1,9 @@
 <?php 
 
-use common\modules\cart\models\Cart;
-use common\modules\cart\models\CartItem;
-use common\modules\order\models\Order;
-use common\modules\user\models\User;
+use ant\cart\models\Cart;
+use ant\cart\models\CartItem;
+use ant\order\models\Order;
+use ant\user\models\User;
 use ant\affiliate\models\Referral;
 use ant\affiliate\models\ReferralContribution;
 use ant\affiliate\filters\ReferralFilter;
@@ -15,13 +15,13 @@ class OrderCest
 		\Yii::configure(\Yii::$app, [
 			'components' => [
 				'cart' => [
-					'class' => 'common\modules\cart\components\CartManager',
+					'class' => 'ant\cart\components\CartManager',
                 ],
                 'affiliateManager' => [
                     'class' => 'ant\affiliate\components\AffiliateManager',
                     'overrideMethods' => [
                         'getCommissionForReferralContribution' => function($contribution) {
-                            return \common\helpers\Currency::rounding($contribution->order->netTotal * 0.10);
+                            return \ant\helpers\Currency::rounding($contribution->order->netTotal * 0.10);
                         }
                     ],
                 ],
@@ -77,7 +77,7 @@ class OrderCest
         $user = $this->createUser();
 
         $order->billTo($user);
-        $order->invoice->pay($price);
+        $order->invoice->payManually($price);
 
         $order->markAsConfirmed();
 

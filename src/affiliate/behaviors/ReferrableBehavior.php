@@ -6,7 +6,7 @@ use yii\db\ActiveRecord;
 use ant\affiliate\models\Referral;
 use ant\affiliate\models\ReferralContribution;
 use ant\affiliate\filters\ReferralFilter;
-use common\modules\order\models\Order;
+use ant\order\models\Order;
 
 class ReferrableBehavior extends \yii\base\Behavior {
     public function events() {
