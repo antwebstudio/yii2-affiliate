@@ -24,6 +24,7 @@ class M190722145055_permissions extends Migration
 				'delete' => ['Delete campaign', [Role::ROLE_USER]],
 				'deactivate' => ['Deactivate campaign', [Role::ROLE_USER]],
 				'activate' => ['Activate campaign', [Role::ROLE_USER]],
+				'view-order' => ['View campaign orders', [Role::ROLE_USER]],
 			],
 		];
 		

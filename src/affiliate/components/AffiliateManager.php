@@ -9,6 +9,8 @@ use ant\affiliate\models\Referral;
 class AffiliateManager extends \yii\base\Component {
     const SESSION_NAME = 'referral';
     const COOKIES_NAME = 'referral';
+	const SESSION_NAME_CAMPAIGN = 'campaign';
+	const COOKIES_NAME_CAMPAIGN = 'campaign';
 
     /**
      * @var Session
@@ -23,6 +25,7 @@ class AffiliateManager extends \yii\base\Component {
 
     public $cookiesExpire = 0; // seconds
     public $overrideMethods = [];
+	public $campaginQueryParamName = 'campaign';
     public $referralQueryParamName = 'referral';
 
     public function init()
@@ -39,6 +42,13 @@ class AffiliateManager extends \yii\base\Component {
       $referral = Referral::findOne(['user_id' => Yii::$app->user->id]);
       return Url::to(ArrayHelper::merge($route, [$this->referralQueryParamName => $referral->name]), true);
     }
+	
+	public function handleCampaignReferralRequest() {
+		$campaign = Yii::$app->request->get($this->campaginQueryParamName);
+		if (isset($campaign)) {
+			$this->setCampaignCode($campaign);
+		}
+	}
 
     public function handleReferralRequest() {
       $referral = Yii::$app->request->get($this->referralQueryParamName);
@@ -50,15 +60,28 @@ class AffiliateManager extends \yii\base\Component {
           }
       }
     }
+	
+	public function setCampaignCode($campaign) {
+		$this->session->set(self::SESSION_NAME_CAMPAIGN, $campaign);
+		$this->cookies->add(new \yii\web\Cookie([
+			'name' => self::COOKIES_NAME_CAMPAIGN,
+			'value' => $campaign,
+			'expire' => $this->cookiesExpire == 0 ? $this->cookiesExpire : time() + $this->cookiesExpire,
+		]));
+	}
 
     public function setReferral($referral) {
-      $referral = $referral instanceof Referral ? $referral->id : $referral;
-      $this->session->set(self::SESSION_NAME, $referral);
-      $this->cookies->add(new \yii\web\Cookie([
-          'name' => self::COOKIES_NAME,
-          'value' => $referral,
-          'expire' => $this->cookiesExpire == 0 ? $this->cookiesExpire : time() + $this->cookiesExpire,
-      ]));
+		$referral = $referral instanceof Referral ? $referral->id : $referral;
+		$this->session->set(self::SESSION_NAME, $referral);
+		$this->cookies->add(new \yii\web\Cookie([
+			'name' => self::COOKIES_NAME,
+			'value' => $referral,
+			'expire' => $this->cookiesExpire == 0 ? $this->cookiesExpire : time() + $this->cookiesExpire,
+		]));
+    }
+
+    public function getCampaignCode() {
+      return $this->session->get(self::SESSION_NAME_CAMPAIGN, $this->requestCookies->getValue(self::COOKIES_NAME_CAMPAIGN));
     }
 
     public function getReferral() {

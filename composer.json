@@ -18,8 +18,7 @@
     "require-dev": {
         "yiisoft/yii2-codeception": "~2.0.0",
         "yiisoft/yii2-gii": "~2.0.0",
-        "yiisoft/yii2-faker": "~2.0.0",
-        "codeception/codeception": "^3.0"
+        "yiisoft/yii2-faker": "~2.0.0"
 	},
     "repositories": [
         {
@@ -28,7 +27,7 @@
         },
 		{
 			"type": "composer",
-			"url": "http://packagist.antwebstudio.com"
+			"url": "https://packagist.antwebstudio.com"
 		}
 	],
 	"scripts": {

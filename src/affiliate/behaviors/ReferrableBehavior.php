@@ -3,6 +3,7 @@ namespace ant\affiliate\behaviors;
 
 use Yii;
 use yii\db\ActiveRecord;
+use ant\affiliate\models\Campaign;
 use ant\affiliate\models\Referral;
 use ant\affiliate\models\ReferralContribution;
 use ant\affiliate\filters\ReferralFilter;
@@ -17,6 +18,7 @@ class ReferrableBehavior extends \yii\base\Behavior {
     }
 
     public function afterInsert($event) {
+		// Record contribution for referral
         $referralId = $this->getReferralId();
 		$referral = Referral::findOne($referralId);
 
@@ -32,7 +34,23 @@ class ReferrableBehavior extends \yii\base\Behavior {
 		if (isset($referral)) {
 			$referral->updateContribution($this->owner);
 		}
+		
+		// Record contribution for campaign
+		$campaign = Campaign::findOne($this->getCampaignId());
+
+        if (isset($campaign)) {
+            $campaign->recordContribution($this->owner);
+        }
     }
+	
+	protected function getCampaignId() {
+        $campaignCode = Yii::$app->affiliateManager->getCampaignCode();
+		if (trim($campaignCode) != '') {
+			$campaign = Campaign::ensureCodeFor($campaignCode, get_class($this->owner->item), $this->owner->item->id);
+			
+			return $campaign->id;
+		}
+	}
 
     protected function getReferralId() {
         return Yii::$app->affiliateManager->getReferral();

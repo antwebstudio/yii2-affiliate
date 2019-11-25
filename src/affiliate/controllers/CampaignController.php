@@ -4,6 +4,7 @@ namespace ant\affiliate\controllers;
 
 use Yii;
 use ant\affiliate\models\Campaign;
+use ant\affiliate\models\CampaignContribution;
 use ant\affiliate\models\CampaignSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -20,6 +21,9 @@ class CampaignController extends Controller
     public function behaviors()
     {
         return [
+			'access' => [
+				'class' => \ant\rbac\ModelAccessControl::className(),
+			],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -143,6 +147,25 @@ class CampaignController extends Controller
 
         return $this->redirect(Yii::$app->request->referrer);
     }
+	
+	public function actionViewOrder($id) {
+        $campaign = Campaign::findOne($id);
+		if (!isset($campaign)) throw new NotFoundHttpException('Campaign not exist. ');
+        $model = $campaign->model;
+        if (!isset($model)) throw new NotFoundHttpException('Page not exist.');
+		
+        $this->checkAccess('manage', $model);
+		
+		$dataProvider = new \yii\data\ActiveDataProvider([
+			'query' => CampaignContribution::find()->andWhere(['campaign_id' => $id]),
+		]);
+
+        return $this->render($this->action->id, [
+            'campaign' => $campaign,
+            'model' => $model,
+			'dataProvider' => $dataProvider,
+        ]);
+	}
 
     /**
      * Finds the Campaign model based on its primary key value.

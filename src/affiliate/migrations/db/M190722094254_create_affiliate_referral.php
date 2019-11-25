@@ -2,7 +2,7 @@
 
 namespace ant\affiliate\migrations\db;
 
-use ant\components\Migration;
+use ant\db\Migration;
 
 /**
  * Class M190722094254_create_affiliate_referral

@@ -10,6 +10,7 @@ class ReferralFilter extends \yii\base\ActionFilter {
 
     public function beforeAction($action) {
         Yii::$app->affiliateManager->handleReferralRequest();
+		Yii::$app->affiliateManager->handleCampaignReferralRequest();
         return parent::beforeAction($action);
     }
 }

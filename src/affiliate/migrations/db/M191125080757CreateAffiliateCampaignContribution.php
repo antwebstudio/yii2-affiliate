@@ -5,11 +5,11 @@ namespace ant\affiliate\migrations\db;
 use ant\db\Migration;
 
 /**
- * Class M190806204440_create_affiliate_Campaign
+ * Class M191125080757CreateAffiliateCampaignContribution
  */
-class M190806204440_create_affiliate_campaign extends Migration
+class M191125080757CreateAffiliateCampaignContribution extends Migration
 {
-    protected $tableName = '{{%affiliate_campaign}}';
+    protected $tableName = '{{%affiliate_campaign_contribution}}';
     /**
      * {@inheritdoc}
      */
@@ -17,15 +17,15 @@ class M190806204440_create_affiliate_campaign extends Migration
     {
         $this->createTable($this->tableName, [
             'id' => $this->primaryKey()->unsigned(),
-            'model_class_id' => $this->integer()->unsigned(),
-            'model_id' => $this->integer()->unsigned(),
-            'commission_percent' => $this->integer()->null()->defaultValue(null),
+            'campaign_id' => $this->integer(10)->unsigned(),
+            'order_id' => $this->integer(10)->unsigned(),
             'status' => $this->smallInteger()->notNull()->defaultValue(0),
             'created_at' => $this->timestamp()->null()->defaultValue(null),
             'updated_at' => $this->timestamp()->null()->defaultValue(null),
         ], $this->getTableOptions());
 
-        $this->addForeignKeyTo('{{%model_class}}', 'model_class_id');
+        $this->addForeignKeyTo('{{%affiliate_campaign}}', 'campaign_id', self::FK_TYPE_SET_NULL, self::FK_TYPE_SET_NULL);
+        $this->addForeignKeyTo('{{%order}}', 'order_id', self::FK_TYPE_SET_NULL, self::FK_TYPE_SET_NULL);
     }
 
     /**
@@ -33,9 +33,7 @@ class M190806204440_create_affiliate_campaign extends Migration
      */
     public function safeDown()
     {
-        echo "M190806204440_create_affiliate_Campaign cannot be reverted.\n";
-
-        return false;
+        $this->dropTable($this->tableName);
     }
 
     /*
@@ -47,7 +45,7 @@ class M190806204440_create_affiliate_campaign extends Migration
 
     public function down()
     {
-        echo "M190806204440_create_affiliate_Campaign cannot be reverted.\n";
+        echo "M191125080757CreateAffiliateCampaignContribution cannot be reverted.\n";
 
         return false;
     }

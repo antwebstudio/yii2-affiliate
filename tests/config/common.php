@@ -3,6 +3,7 @@ return [
 	'id' => 'app-test',
 	'basePath' => dirname(__DIR__),
 	'aliases' => [
+		'ant' => dirname(dirname(__DIR__)).'/src',
 		'api' => dirname(dirname(__DIR__)).'/src/api',
 		'common/config' => __DIR__, // dirname(dirname(__DIR__)).'/vendor/inspirenmy/yii2-core/src/common/config',
 		//'common/modules/moduleManager' => dirname(dirname(__DIR__)).'/vendor/inspirenmy/yii2-core/src/common/modules/moduleManager',
@@ -24,7 +25,7 @@ return [
            'channels' => [
                'mail' => [
                    'class' => '\tuyakhov\notifications\channels\MailChannel',
-                   'from' => env('ROBOT_EMAIL'),
+                   'from' => 'robot@antwebstudio.com',
                ],
            ],
        ],
@@ -45,7 +46,7 @@ return [
             'charset' => 'utf8',
         ],
         'moduleManager' => [
-            'class' => 'ant\moduleManager\components\ModuleManager',
+            'class' => 'ant\moduleManager\ModuleManager',
 			'moduleAutoloadPaths' => [
 				'@src', 
 				'@ant', 
