@@ -65,14 +65,14 @@ if (!isset($referral)) throw new \yii\web\NotFoundHttpException('You don\'t have
 		<div class="col-md-4 col-xs-6">
 			<div style="background-color: #dddddd; padding: 10px 15px; ">
 				<p>Total Contributed: </p>
-				<h1><?= Yii::$app->formatter->asCurrency($referral->getTotalContributionAmount()) ?></h1>
+				<h1><?= Yii::$app->formatter->asCurrency(ReferralContribution::findRewardedByUserId(Yii::$app->user->id)->getTotalContributionAmount()) ?></h1>
 			</div>
 		</div>
 
 		<div class="col-md-4 col-xs-6">
 			<div style="background-color: #dddddd; padding: 10px 15px; ">
 				<p>Total Commission: </p>
-				<h1><?= Yii::$app->formatter->asCurrency($referral->getTotalCommission()) ?></p></h1>
+				<h1><?= Yii::$app->formatter->asCurrency(ReferralContribution::findRewardedByUserId(Yii::$app->user->id)->getTotalCommission()) ?></p></h1>
 			</div>
 		</div>
 	</div>
@@ -80,8 +80,7 @@ if (!isset($referral)) throw new \yii\web\NotFoundHttpException('You don\'t have
 	<h2>Details</h2>
 	<?= \yii\grid\GridView::widget([
 		'dataProvider' => new ActiveDataProvider([
-			'query' => $referral->getCompletedContributions(),
-			
+			'query' => ReferralContribution::findRewardedByUserId(Yii::$app->user->id)
 		]),
 		'columns' => [
 			[

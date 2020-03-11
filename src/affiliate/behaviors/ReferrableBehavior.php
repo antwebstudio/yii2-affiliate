@@ -23,7 +23,7 @@ class ReferrableBehavior extends \yii\base\Behavior {
 		$referral = Referral::findOne($referralId);
 
         if (isset($referral) && (!isset($referral->campaign) || $referral->campaign->isActive)) {
-            $referral->recordContribution($this->owner);
+            $referral->recordContribution($this->owner, false);
         }
     }
 
@@ -32,7 +32,7 @@ class ReferrableBehavior extends \yii\base\Behavior {
 		$referral = Referral::findOne($referralId);
 		
 		if (isset($referral)) {
-			$referral->updateContribution($this->owner);
+			$referral->updateContribution($this->owner, true);
 		}
 		
 		// Record contribution for campaign

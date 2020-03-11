@@ -89,4 +89,18 @@ class ReferralContribution extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Referral::className(), ['id' => 'referral_id']);
     }
+	
+	public static function find() {
+		return new \ant\affiliate\models\query\ReferralContributionQuery(get_called_class());
+	}
+	
+	public static function findRewardedByUserId($userId) {
+		return self::find()
+			->joinWith(['order order' => function($q) {
+				$q->joinWith('invoice invoice');
+			}])
+			->joinWith('referral referral')
+			->andWhere(['order.status' => 1]) // Rewarded
+			->andWhere(['referral.user_id' => Yii::$app->user->id]);
+	}
 }

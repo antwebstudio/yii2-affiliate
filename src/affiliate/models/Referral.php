@@ -107,13 +107,18 @@ class Referral extends \yii\db\ActiveRecord
 		return isset($sum) ? Currency::rounding($sum) : 0;
 	}
 	
-	public function recordContribution($order) {
+	public function recordContribution($order, $calculateComission = true) {
+		
 		$contribution = new ReferralContribution;
 		$contribution->referral_id = $this->id;
 		$contribution->order_id = $order->id;
 		$contribution->status = 0;
 		
-		if (isset($this->campaign)) {
+		if (isset($this->campaign) && $calculateComission) {
+			if (!isset($order->subtotal) || trim($order->subtotal) == '') {
+				throw new \Exception('Order subtotal is null. ');
+			}
+			if (!isset($this->campaign->commission_percent)) throw new \Exception('Campaign (ID: '.$this->campaign->id.') commission percentage is not set. ');
 			$contribution->commission_amount = Currency::rounding($this->calculateComission($order->subtotal, $this->campaign->commission_percent / 100));
 		}
 
@@ -122,8 +127,11 @@ class Referral extends \yii\db\ActiveRecord
 		return $contribution;
 	}
 	
-	public function updateContribution($order) {
+	public function updateContribution($order, $setStatusAsRewarded = false) {
 		$contribution = ReferralContribution::findOne(['order_id' => $order->id]);
+		if ($setStatusAsRewarded) {
+			$contribution->status = 1;
+		}
 		
 		if (isset($this->campaign)) {
 			$contribution->commission_amount = Currency::rounding($this->calculateComission($order->subtotal, $this->campaign->commission_percent / 100));
@@ -135,6 +143,9 @@ class Referral extends \yii\db\ActiveRecord
 	}
 	
 	protected function calculateComission($amount, $rate) {
+		if (!is_numeric($amount)) throw new \Exception('Amount is not numeric: '.$amount);
+		if (!is_numeric($rate)) throw new \Exception('Rate is not numeric: '.$rate);
+		
 		return $amount * $rate;
 	}
 }
